@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Тест виджета</title>
+<script src="https://cdn.jsdelivr.net/npm/@cdek-it/widget@3" charset="utf-8"></script>
+<style>
+  #cdek-map { width: 100%; height: 600px; border: 3px solid red; }
+  body { font-family: monospace; padding: 20px; }
+  #log { background: #222; color: #0f0; padding: 15px; white-space: pre-wrap; min-height: 100px; }
+</style>
+</head>
+<body>
+
+<h2>Тест виджета СДЭК</h2>
+<div id="cdek-map"></div>
+<pre id="log">Загрузка...</pre>
+
+<script>
+const log = document.getElementById('log');
+const add = (msg) => { log.textContent += '\n' + msg; console.log(msg); };
+
+window.addEventListener('DOMContentLoaded', () => {
+  add('1. DOM готов');
+  add('2. CDEKWidget доступен: ' + (typeof window.CDEKWidget !== 'undefined'));
+  
+  try {
+    const w = new window.CDEKWidget({
+      from: 'Новосибирск',
+      to: 'Москва',
+      root: 'cdek-map',
+      apiKey: '964f6a11-7ee5-488a-8f87-a9e765871369',
+      servicePath: 'https://cdek30.infinityfree.io/service.php',
+      defaultLocation: 'Москва',
+      lang: 'ru',
+      type: 'inline',
+      tariffs: ['136','137','368'],
+      onReady: () => add('✅ Виджет готов'),
+      onError: (e) => add('❌ Ошибка: ' + JSON.stringify(e)),
+      onSelect: (p) => add('📍 ПВЗ: ' + JSON.stringify(p)),
+    });
+    add('3. Виджет создан');
+  } catch(e) {
+    add('❌ Исключение: ' + e.message);
+  }
+});
+</script>
+
+</body>
+</html>
